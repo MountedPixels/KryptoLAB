@@ -9,21 +9,22 @@ import time
 
 def main():
     if(sys.argv[1] == "-r"):
-        calc_rauheitsgrad()
+        calc_rauheitsgrad_argv()
     if(sys.argv[1] == "-b"):
         calc_blocklength()
     if(sys.argv[1] == "-d"):
         decrypt()
     pass
 
+
 def calc_occurence(clear, encrypted, blocks):
-    #Verschlüsselter Text
-    encrypted_matrix = [[0] *128 for x in range(blocks)]
+    # Verschlüsselter Text
+    encrypted_matrix = [[0] * 128 for x in range(blocks)]
 
     for pos_crypto, ep_clear in enumerate(encrypted):
         encrypted_matrix[pos_crypto % blocks][ord(ep_clear)] += 1
         pass
-    
+
     #encrypted_matrix = [[x/(len(encrypted)/blocks) for x in array] for array in encrypted_matrix]
 
     # encrypted_array = [0] * 128
@@ -35,16 +36,16 @@ def calc_occurence(clear, encrypted, blocks):
     #         pass
     #     encrypted_array[i] = np.average(average)
     #     pass
-     
+
     # print(encrypted_array)
 
-    #Klartext wahrscheinlichkeiten
-    clear_array = [0] *128
+    # Klartext wahrscheinlichkeiten
+    clear_array = [0] * 128
 
     for pos_crypto, ep_clear in enumerate(clear):
         clear_array[ord(ep_clear)] += 1
         pass
-    
+
     #clear_array = [x/len(clear) for x in clear_array]
 
     max_clear = np.argmax(clear_array)
@@ -55,14 +56,14 @@ def calc_occurence(clear, encrypted, blocks):
         cryp_max = np.argmax(array)
 
         key.append((cryp_max - max_clear) % 128)
-    
+
     key = ''.join(chr(x) for x in key)
 
     return key
     pass
 
 
-def calc_rauheitsgrad():
+def calc_rauheitsgrad_argv():
     # input file
     read_filename = sys.argv[2]
 
@@ -85,6 +86,7 @@ def calc_rauheitsgrad():
 
     print(sum_p - 1/128)
 
+
 def calc_rauheitsgrad(text):
 
     # liste mit allen möglichen chars
@@ -100,6 +102,7 @@ def calc_rauheitsgrad(text):
         sum_p = sum_p + (char_array[i]/len(text))**2
 
     return(sum_p - 1/128)
+
 
 def calc_blocklength():
     # input file
@@ -173,10 +176,17 @@ def decrypt():
         for num, char in enumerate(text_input):
             text += chr((ord(char) - ord(key[num % i])) % 128)
         if(abs(calc_rauheitsgrad(text) - calc_rauheitsgrad(text_input_clear)) < _min):
-            _min = abs(calc_rauheitsgrad(text) - calc_rauheitsgrad(text_input_clear))
+            _min = abs(calc_rauheitsgrad(text) -
+                       calc_rauheitsgrad(text_input_clear))
             _key = key
             _text = text
+
     print(_text)
+    for i in range(1, len(_key)):
+        if (_key[:i] == _key[i: i*2]):
+            _key = _key[:i]
+            break
+        pass
     print("Key: " + _key)
 
 
@@ -191,6 +201,7 @@ def zerlegung(pos, zahl, _max):
         zahl[pos] += 1
         pos = 0
     return (pos, zahl, _max, True)
+
 
 def primfaktor(_n):
     n = _n
