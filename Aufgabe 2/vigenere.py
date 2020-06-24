@@ -182,12 +182,20 @@ def decrypt():
             _text = text
 
     print(_text)
-    for i in range(1, len(_key)):
-        if (_key[:i] == _key[i: i*2]):
+    for i in range(np.min(blocks), len(_key)):
+        cycle = True
+        j = i
+        while(j < len(_key) and cycle):
+            if (_key[:i] != _key[j:j+i]):
+                cycle = False
+            j = j + i
+        if(cycle):
             _key = _key[:i]
             break
+
         pass
     print("Key: " + _key)
+    print("Keylength: %s" % len(_key))
 
 
 def zerlegung(pos, zahl, _max):
