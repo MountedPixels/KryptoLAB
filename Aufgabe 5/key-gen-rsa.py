@@ -8,7 +8,7 @@ import random as rand
 
 def main():
     print("Genutzte Primzahlen")
-    p, q = get_prims(2048, 2048*2)
+    p, q = get_prims(32, 64)
     print("p: %s" % p)
     print("q: %s" % q)
     phi = ((p-1)*(q-1))
@@ -24,6 +24,12 @@ def main():
     print("Private Key: %s" % private_key)
     print((public_key * private_key) % phi)
     #print(inverse(693, 147))
+
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    file = open(dir_path + "/keys.txt", "w")
+    file.write("Public Key: %s\nPrivate Key: %s\nn: %s" %
+               (public_key, private_key, p*q))
+    file.close()
     pass
 
 
@@ -60,18 +66,29 @@ def miller_rabin(n):
 
 def get_prims(a: int, b: int):
     """
-    Range in Bit
-    a -> max
+    Input
+    a -> min Bit
+    b -> max Bit
 
-    b -> min
+    Rückgabe
+    p -> int
+    q -> int
+
+    Wobei a < p*q < b 
     """
-    p = rand.randint(2**a, 2**b - 1)
-    while(miller_rabin(p) == False):
-        p += 1
+    p = 0
+    q = 0
+    while True:
+        p = rand.randint(1, 2**a - 1)
+        q = rand.randint(1, int((2**b - 1)/p))
 
-    q = rand.randint(2**a, 2**b - 1)
-    while(miller_rabin(q) == False):
-        q += 1
+        while(miller_rabin(p) == False):
+            p += 1
+        while(miller_rabin(q) == False):
+            q += 1
+
+        if(p*q > 2**a - 1 and p*q < 2**b - 1):
+            break
 
     return (p, q)
 
