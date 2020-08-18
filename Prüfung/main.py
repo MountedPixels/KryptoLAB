@@ -1,6 +1,8 @@
 import additive
 import vigenere
+import des
 import os
+import rsa
 
 # Pfade deklarieren für einfacherere Nutzung
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -31,7 +33,28 @@ def main():
     # Test vigenere
     # test_vigenere()
 
+    # Test DES
+    # test_des()
+
+    # Test RSA
+    test_rsa()
+
     pass
+
+
+def test_rsa():
+    public_key, private_key, n = rsa.make_key(path["out"] + "/rsa-keys.txt")
+    rsa.encrypt(public_key, n, path["reference"]
+                ["lorem"], path["out"] + "/rsa-encrypted.txt")
+    rsa.decrypt(private_key, n, path["out"] +
+                "/rsa-encrypted.txt", path["out"] + "/rsa-clear.txt")
+
+
+def test_des():
+    des.enrcypt("0f0f0f0f0f0f0f0f",
+                path["out"] + "/des-crypto.txt", path["reference"]["lorem"])
+    des.decrypt("0f0f0f0f0f0f0f0f",
+                path["out"] + "/des-clear.txt", path["out"] + "/des-crypto.txt")
 
 
 def test_additive(text: str):
