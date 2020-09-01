@@ -15,7 +15,7 @@ def calc_occurence(clear, encrypted, blocks):
         encrypted_matrix[pos_crypto % blocks][ord(ep_clear)] += 1
         pass
 
-    #encrypted_matrix = [[x/(len(encrypted)/blocks) for x in array] for array in encrypted_matrix]
+    # encrypted_matrix = [[x/(len(encrypted)/blocks) for x in array] for array in encrypted_matrix]
 
     # encrypted_array = [0] * 128
 
@@ -117,6 +117,8 @@ def calc_blocklength(text_input: str):
             max_ic_pos = i
 
     print(primfaktor(max_ic_pos + 1))
+    print(ic_list[0])
+    print(ic_list)
     return(primfaktor(max_ic_pos + 1))
 
 
